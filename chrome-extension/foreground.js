@@ -1,4 +1,6 @@
 
+const authLink = "https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost&response_type=token&scope=user:read:email"
+
 console.log("EXECUTING FOREGROUND")
 const chatHeaderSelector = "h5[data-test-selector='chat-room-header-label']";
 const chatContainerSelector = "section[data-test-selector='chat-room-component-layout']";
@@ -14,6 +16,9 @@ const loginButton = document.createElement("button")
 loginButton.className = buttonClasses;
 loginButton.innerHTML = "Login with Twitch";
 loginButton.style.padding = '16px';
+loginButton.onclick = () => {
+  window.open(authLink, '_blank').focus();
+}
 proChatContainer.appendChild(loginButton);
 chatContainer.parentNode.appendChild(proChatContainer);
 const originalProChatDisplay = proChatContainer.style.display;
