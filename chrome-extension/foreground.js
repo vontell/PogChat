@@ -1,5 +1,15 @@
 
-const authLink = "https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost&response_type=token&scope=user:read:email"
+
+
+//const authLink = "https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost&response_type=token&scope=user:read:email"
+
+function uuidv4() {
+  const a = crypto.getRandomValues(new Uint16Array(8));
+  let i = 0;
+  return '00-0-4-1-000'.replace(/[^-]/g,
+      s => (a[i++] + s * 0x10000 >> s).toString(16).padStart(4, '0')
+  );
+}
 
 console.log("EXECUTING FOREGROUND")
 const chatHeaderSelector = "h5[data-test-selector='chat-room-header-label']";
@@ -17,6 +27,11 @@ loginButton.className = buttonClasses;
 loginButton.innerHTML = "Login with Twitch";
 loginButton.style.padding = '16px';
 loginButton.onclick = () => {
+  // Generate an auth link specific to this user
+  let uuid = uuidv4()
+  const authLink = `https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost:8080/auth&response_type=token&scope=user:read:email`
+  console.log(uuid)
+  console.log(authLink)
   window.open(authLink, '_blank').focus();
 }
 proChatContainer.appendChild(loginButton);
