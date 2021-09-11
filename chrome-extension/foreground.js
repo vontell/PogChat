@@ -29,7 +29,7 @@ loginButton.style.padding = '16px';
 loginButton.onclick = () => {
   // Generate an auth link specific to this user
   let uuid = uuidv4()
-  const authLink = `https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost:8080/auth&response_type=token&scope=user:read:email`
+  const authLink = `https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost:8080/auth&response_type=code&scope=user:read:email&state=${uuid}`
   console.log(uuid)
   console.log(authLink)
   window.open(authLink, '_blank').focus();
