@@ -14,7 +14,10 @@ data class User(
     val id: Long = 0,
 
     @get: NotBlank
-    val username: String = ""
+    val username: String = "",
+
+    @get: NotBlank
+    val lastKnownDisplayName: String = ""
 
 ) {
     override fun equals(other: Any?): Boolean {

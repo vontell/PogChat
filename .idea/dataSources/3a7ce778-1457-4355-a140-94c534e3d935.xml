@@ -993,48 +993,56 @@ pogchat|schema||pogchamp||UPDATE|G</Grants>
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <index id="303" parent="279" name="UKsb8bbouer5wak8vyiiy4pf2bx">
+    <column id="303" parent="279" name="last_known_display_name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <index id="304" parent="279" name="UKsb8bbouer5wak8vyiiy4pf2bx">
       <ColNames>username</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="304" parent="279" name="PRIMARY">
+    <key id="305" parent="279" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="305" parent="279" name="UKsb8bbouer5wak8vyiiy4pf2bx">
+    <key id="306" parent="279" name="UKsb8bbouer5wak8vyiiy4pf2bx">
       <ColNames>username</ColNames>
       <UnderlyingIndexName>UKsb8bbouer5wak8vyiiy4pf2bx</UnderlyingIndexName>
     </key>
-    <column id="306" parent="280" name="id">
+    <column id="307" parent="280" name="id">
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="307" parent="280" name="access_token">
+    <column id="308" parent="280" name="access_token">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="308" parent="280" name="refresh_token">
+    <column id="309" parent="280" name="refresh_token">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="309" parent="280" name="user_id">
+    <column id="310" parent="280" name="user_id">
       <Position>4</Position>
       <DataType>bigint|0s</DataType>
     </column>
-    <index id="310" parent="280" name="FKraru0qloxyh7wacxneiam2hi7">
+    <column id="311" parent="280" name="expiration">
+      <Position>5</Position>
+      <DataType>datetime(6)|0s</DataType>
+    </column>
+    <index id="312" parent="280" name="FKraru0qloxyh7wacxneiam2hi7">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="311" parent="280" name="PRIMARY">
+    <key id="313" parent="280" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="312" parent="280" name="FKraru0qloxyh7wacxneiam2hi7">
+    <foreign-key id="314" parent="280" name="FKraru0qloxyh7wacxneiam2hi7">
       <ColNames>user_id</ColNames>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
