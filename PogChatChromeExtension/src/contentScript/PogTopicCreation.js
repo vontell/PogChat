@@ -25,9 +25,16 @@ function PogTopicCreation() {
                 Create New Topic
             </div><br/>
 
-            <b>Stream:</b> {streamName}<br/>
-            <b>StreamID:</b> {streamId}<br/>
-            <b>Category:</b> {category}
+            <div>
+                Creating inside of <span style={{color: "#9307cc"}}>{streamName}</span> and <span style={{color: "#ff5300"}}>{category}</span>
+            </div><br />
+
+            <div className="Pogchat-TextInput-Label">Title</div>
+            <input className="Pogchat-TextInput" style={{width: "100%"}}/><br />
+
+            <div className="Pogchat-TextInput-Label">Description</div>
+            <textarea className="Pogchat-TextInput" style={{width: "100%", height: 300}}/>
+
         </div>
     )
 

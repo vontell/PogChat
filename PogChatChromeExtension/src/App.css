@@ -35,6 +35,19 @@
   font-size: 20px;
 }
 
+.Pogchat-TextInput {
+  background-color: lightgray;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  padding: 8px;
+}
+
+.Pogchat-TextInput-Label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
