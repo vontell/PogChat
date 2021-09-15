@@ -1,15 +1,17 @@
 package org.vontech.pogchat.usertoken
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.ModelAndView
 import org.vontech.pogchat.TwitchApi
+import org.vontech.pogchat.config.JwtTokenUtil
+import org.vontech.pogchat.config.JwtUserDetailsService
 import org.vontech.pogchat.users.User
 import org.vontech.pogchat.users.UserRepository
 import java.time.Instant
 import java.util.*
-import javax.servlet.http.HttpServletResponse
+
 
 data class LoggedInPollingResponse (
     val ready: Boolean,
@@ -29,6 +31,12 @@ class UserTokenController {
     @Autowired
     private val userRepository: UserRepository? = null;
 
+    @Autowired
+    private val jwtTokenUtil: JwtTokenUtil? = null
+
+    @Autowired
+    private val userDetailsService: JwtUserDetailsService? = null
+
     @GetMapping
     fun receiveTwitchToken(
         @RequestParam code: String,
@@ -43,12 +51,15 @@ class UserTokenController {
         // Get the username for this user
         val userInfo = TwitchApi.getUserInformation(accessTokenResponse.access_token) ?: throw Exception("Could not authorize")
 
+        // We skip AuthenticationManager authentication because that is done by Twitch in our case
+
         // Save the information within our DB. First, figure out if this user exists
         val user: User = userRepository?.findByUsername(userInfo.login) ?: User(
             username=userInfo.login,
             lastKnownDisplayName=userInfo.display_name).apply {
             userRepository?.save(this) ?: throw Exception("Unable to create user")
         }
+        val jwtToken = jwtTokenUtil?.generateToken(user.username) ?: throw Exception("Unable to create user")
         // Now save the new accessToken. First, delete any existing access tokens
         userTokenRepository?.deleteByUserId(user.id)
         val newToken = UserToken(
@@ -56,15 +67,9 @@ class UserTokenController {
             pogAccessToken=state,
             accessToken=accessTokenResponse.access_token,
             refreshToken=accessTokenResponse.refresh_token,
-            expiration=Date(
-                Instant.now().plusSeconds(accessTokenResponse.expires_in).toEpochMilli())
+            jwt=jwtToken
         )
         userTokenRepository?.save(newToken) ?: throw Exception("Unable to save access token")
-
-//        val extension = "chrome-extension://eljdflajgnpmenefoohehbhpcdkoiefn/options.html" +
-//                "?access_token=$state"
-//        httpServletResponse.status = 302
-//        httpServletResponse.setHeader("Location", extension)
 
         return "auth_success.html"
     }
@@ -78,7 +83,7 @@ class UserTokenController {
         return LoggedInPollingResponse(
             ready=true,
             user=userToken.user,
-            token=userToken.pogAccessToken
+            token=userToken.jwt
         )
     }
 

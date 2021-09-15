@@ -15,17 +15,20 @@ data class UserToken(
     @JoinColumn(name="user_id")
     val user: User? = null,
 
+    // This is the token generated for polling login status
     @get: NotBlank
     val pogAccessToken: String? = null,
 
+    // This is the twitch access token
     @get: NotBlank
     val accessToken: String? = null,
 
+    // This is the Pogchat JWT token used for authentication on our backend
     @get: NotBlank
-    val refreshToken: String? = null,
+    val jwt: String? = null,
 
-    @Temporal(TemporalType.TIMESTAMP)
-    val expiration: Date = Date()
+    @get: NotBlank
+    val refreshToken: String? = null
 
     ) {
     override fun equals(other: Any?): Boolean {

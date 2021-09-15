@@ -9,4 +9,8 @@ interface UserTokenRepository : CrudRepository<UserToken?, Int?> {
     @Transactional
     fun deleteByUserId(userId: Long)
     fun findByPogAccessToken(pogAccessToken: String): UserToken?
+
+    @Query("SELECT t FROM UserToken t WHERE t.user.username = :username")
+    fun findByUserUsername(username: String): UserToken?
+
 }
