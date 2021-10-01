@@ -8,7 +8,7 @@ import Pogchat from "./Pogchat";
 
 const CHAT_CONTAINER_SEL = "section[data-test-selector='chat-room-component-layout']";
 const CHAT_HEADER_SEL = "h5[data-test-selector='chat-room-header-label']";
-const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 euIPFy";
+const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
 
 waitToAttachPogchat();
 
@@ -36,6 +36,7 @@ export function attachButtonSwitchers() {
   chatContainer.parentNode.appendChild(pogChatContainer);
   const originalPogChatDisplay = pogChatContainer.style.display;
   pogChatContainer.style.setProperty('display', 'none', 'important');
+  pogChatContainer.style.setProperty('height', '100%');
   pogChatContainer.id = "pogchat-container";
 
   // Construct the normal chat button
@@ -47,7 +48,7 @@ export function attachButtonSwitchers() {
   // Construct the Pog Chat button
   const pogButton = document.createElement("button")
   pogButton.className = BUTTON_CLASSES;
-  pogButton.innerHTML = "Pro Chat";
+  pogButton.innerHTML = "PogChat";
   pogButton.style.padding = '16px';
   pogButton.style.backgroundColor = '#ED2938';
   pogButton.style.marginLeft = '12px';

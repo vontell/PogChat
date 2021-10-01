@@ -16,7 +16,7 @@ class JwtTokenUtil {
 
     companion object {
         private val serialVersionUID = -2550185165626007488L
-        private val JWT_TOKEN_VALIDITY = (5 * 60 * 60).toLong()
+        private val JWT_TOKEN_VALIDITY = (30* 24 * 60 * 60).toLong()
     }
 
     @Value("\${jwt.secret}")

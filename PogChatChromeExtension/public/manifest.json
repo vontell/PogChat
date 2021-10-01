@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "version": "0.0.1",
   "short_name": "Pogchat",
-  "name": "Organized discourse for Twitch",
-  "description": "Talk strats, builds, esports events, and more in this accessible Twitch chat companion.",
+  "name": "Pogchat",
+  "description": "Talk strats, builds, esports events, and more in this Twitch chat companion.",
   "browser_action": {
     "default_title": "CRE",
     "default_popup": "popup.html"

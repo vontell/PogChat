@@ -30,9 +30,22 @@
   color: #61dafb;
 }
 
+.Pogchat-StreamName {
+  color: #9307cc;
+}
+
+.Pogchat-Category {
+  color: #ff5300
+}
+
 .Pogchat-Header {
   font-weight: bold;
   font-size: 20px;
+}
+
+.Pogchat-BackButton {
+  cursor: pointer;
+  margin-right: 8px;
 }
 
 .Pogchat-TextInput {
@@ -46,6 +59,76 @@
 .Pogchat-TextInput-Label {
   font-weight: 600;
   font-size: 14px;
+}
+
+.Pogchat-TopicLink-Container {
+  white-space: nowrap;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.Pogchat-TopicLink-Header {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.Pogchat-TopicLink {
+  width: 184px;
+  background-color: #9147ff;
+  color: white;
+  border-radius: 0.4rem;
+  padding: 8px;
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.Pogchat-TopicLink:hover {
+  background-color: #772ce8;
+}
+
+.Pogchat-TopicLink-Title {
+  white-space: break-spaces;
+  height: 38px;
+}
+
+.Pogchat-TopicLink-Author {
+  font-style: italic;
+  color: white;
+  font-size: 10px;
+  font-weight: 100;
+  display: inline;
+  float: left;
+}
+
+.Pogchat-TopicLink-Date {
+  font-style: italic;
+  color: white;
+  font-size: 10px;
+  font-weight: 100;
+  display: inline;
+  float: right;
+}
+
+.Pogchat-Chat-Input {
+  position: absolute;
+  bottom: 16px;
+}
+
+.Pogchat-Message-Container {
+  height: 350px;
+  overflow-y: scroll;
+}
+
+.Pogchat-Message {
+  margin-bottom: 8px;
+}
+
+.Pogchat-Empty-Topic {
+  margin: 12px;
+  text-align: center;
 }
 
 @keyframes App-logo-spin {

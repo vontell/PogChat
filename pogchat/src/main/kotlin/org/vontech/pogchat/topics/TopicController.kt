@@ -1,29 +1,32 @@
 package org.vontech.pogchat.topics
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import org.vontech.pogchat.users.User
-import org.vontech.pogchat.users.UserRepository
+import org.vontech.pogchat.UserContext
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.Predicate
+import javax.persistence.criteria.Root
 
 @Controller
 @RequestMapping(path = ["/topics"])
 class TopicController {
 
     @Autowired
-    private val userRepository: UserRepository? = null
+    private val topicRepository: TopicRepository? = null
 
     @Autowired
-    private val topicRepository: TopicRepository? = null
+    private val userContext: UserContext? = null
 
     @PostMapping
     @ResponseBody
     fun addNewTopic(
-        @RequestBody topic: Topic,
-        @RequestParam username: String
+        @RequestBody topic: Topic
     ): Topic {
         // Attach a user to this
-        val user = userRepository!!.findByUsername(username)
+        val user = userContext!!.getUser()
         topic.user = user
         topicRepository!!.save(topic)
         return topic
@@ -35,9 +38,15 @@ class TopicController {
         return topicRepository!!.findByDistinctCategory()
     }
 
-    @get:ResponseBody
-    @get:GetMapping
-    val allTopics: Iterable<Topic?>
-        get() =// This returns a JSON or XML with the users
-            topicRepository!!.findAll()
+    @ResponseBody
+    @GetMapping
+    fun allTopics(
+        @RequestParam category: String?,
+        @RequestParam stream: String?
+    ): Iterable<Topic?> {
+        val topic = Topic(stream = stream, category = category)
+        println(topic)
+        println(Topic.hasFilters(topic))
+        return topicRepository!!.findAll(Topic.hasFilters(topic))
+    }
 }
