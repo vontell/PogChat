@@ -80,7 +80,7 @@
   border-radius: 0.4rem;
   padding: 8px;
   font-weight: 600;
-  display: inline-block;
+  display: inline-flex;
   margin-right: 8px;
   cursor: pointer;
 }
@@ -90,8 +90,8 @@
 }
 
 .Pogchat-TopicLink-Title {
-  white-space: break-spaces;
   height: 38px;
+  overflow-y: hidden;
 }
 
 .Pogchat-TopicLink-Author {
@@ -129,6 +129,12 @@
 .Pogchat-Empty-Topic {
   margin: 12px;
   text-align: center;
+}
+
+.Pogchat-Bottom-Buttons {
+  bottom: 12px;
+  display: inline-flex;
+  position: absolute;
 }
 
 @keyframes App-logo-spin {

@@ -6,7 +6,6 @@ import '../App.css';
 import {getStreamInfo} from "./utils";
 import PogApi from "./api";
 import PogTopic from "./PogTopic";
-import ResidentSleeper from './residentsleeper.png';
 
 const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
 
@@ -110,9 +109,7 @@ function Pogchat() {
             if (!userInfo || ! streamInfo) {
                 return;
             }
-            console.log("GETTING TOPICS")
             const {streamId, category} = streamInfo;
-            console.log(`CONTEXT: ${streamId} - ${category}`)
             PogApi.getTopics(null, category)
                 .then((data) => {
                     let topics = data.data;
@@ -128,9 +125,7 @@ function Pogchat() {
             if (!userInfo || ! streamInfo) {
                 return;
             }
-            console.log("GETTING TOPICS")
             const {streamId, category} = streamInfo;
-            console.log(`CONTEXT: ${streamId} - ${category}`)
             if (streamOnly) {
                 PogApi.getTopics(streamId, category)
                     .then((data) => {
@@ -223,6 +218,14 @@ function Pogchat() {
                 <button style={{padding: 16}} className={BUTTON_CLASSES} onClick={() => setCurrentState('create-topic')} >
                     Create Topic
                 </button>
+                <div className="Pogchat-Bottom-Buttons">
+                    <button style={{padding: 16, marginRight: '8px'}} className={BUTTON_CLASSES} >
+                        Share PogChat!
+                    </button>
+                    <button style={{padding: 16}} className={BUTTON_CLASSES} >
+                        Settings
+                    </button>
+                </div>
             </div>
             }
             {userInfo && currentState === 'create-topic' &&
@@ -234,7 +237,7 @@ function Pogchat() {
                 }}/>
             }
             {userInfo && currentState === 'viewing-topic' && selectedTopic &&
-                <PogTopic topic={selectedTopic} onClose={onTopicClosed} />
+                <PogTopic topic={selectedTopic} onClose={onTopicClosed}/>
             }
 
         </div>

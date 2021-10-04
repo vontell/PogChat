@@ -87,4 +87,8 @@ export function mountReactPogger() {
   );
 }
 
+export function attachLogout() {
+
+}
+
 

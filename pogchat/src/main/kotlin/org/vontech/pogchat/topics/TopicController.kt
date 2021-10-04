@@ -45,8 +45,7 @@ class TopicController {
         @RequestParam stream: String?
     ): Iterable<Topic?> {
         val topic = Topic(stream = stream, category = category)
-        println(topic)
-        println(Topic.hasFilters(topic))
         return topicRepository!!.findAll(Topic.hasFilters(topic))
     }
+
 }
