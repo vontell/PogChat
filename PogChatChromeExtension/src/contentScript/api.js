@@ -30,6 +30,27 @@ const PogApi = {
         )
     },
 
+    async getPopularTopics() {
+        let headers = await getHeaders();
+        return axios.get(
+            "http://localhost:8080/topics/popular",
+            {
+                headers: headers
+            }
+        )
+    },
+
+    async viewTopic(topic_id) {
+        let headers = await getHeaders();
+        return axios.post(
+            "http://localhost:8080/topics/view",
+            {
+                topic_id
+            },
+            {headers: headers}
+        )
+    },
+
     async createTopic(title, description, category, stream) {
         let headers = await getHeaders();
         return axios.post(
@@ -63,6 +84,17 @@ const PogApi = {
                 headers: headers,
                 params: { topic_id }
             }
+        )
+    },
+
+    async updateUserColor(color) {
+        let headers = await getHeaders();
+        return axios.post(
+            "http://localhost:8080/users/color",
+            {
+                color
+            },
+            {headers: headers}
         )
     }
 

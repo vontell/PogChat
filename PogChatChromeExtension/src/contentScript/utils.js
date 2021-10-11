@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 
+export const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
+
 export function useInterval(callback, delay) {
     const savedCallback = useRef(callback)
 

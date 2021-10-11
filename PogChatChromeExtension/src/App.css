@@ -41,6 +41,7 @@
 .Pogchat-Header {
   font-weight: bold;
   font-size: 20px;
+  margin-bottom: 12px;
 }
 
 .Pogchat-BackButton {
@@ -133,6 +134,7 @@
 
 .Pogchat-Bottom-Buttons {
   bottom: 12px;
+  right: 12px;
   display: inline-flex;
   position: absolute;
 }

@@ -38,6 +38,11 @@ function PogTopic({topic, onClose}) {
             })
     }, [])
 
+    // Increment view count
+    useEffect(() => {
+        PogApi.viewTopic(topic.id)
+    }, [])
+
     useInterval(() => {
         PogApi.getMessages(topic.id)
             .then((resp) => {

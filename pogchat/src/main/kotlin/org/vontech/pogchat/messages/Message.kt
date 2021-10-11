@@ -1,5 +1,6 @@
 package org.vontech.pogchat.messages
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.vontech.pogchat.topics.Topic
 import org.vontech.pogchat.users.User
 import java.util.*
@@ -17,6 +18,7 @@ data class Message(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="topic_id")
+    @JsonIgnore
     var topic: Topic? = null,
 
     @get: NotBlank

@@ -6,6 +6,7 @@ import '../App.css';
 import {getStreamInfo} from "./utils";
 import PogApi from "./api";
 import PogTopic from "./PogTopic";
+import SettingsPanel from "./SettingsPanel";
 
 const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
 
@@ -23,8 +24,11 @@ function Pogchat() {
     const [userInfo, setUserInfo] = useState(null);
     const [currentState, setCurrentState] = useState(null);
     const [streamInfo, setStreamInfo] = useState(null);
+
     const [streamTopics, setStreamTopics] = useState([]);
     const [categoryTopics, setCategoryTopics] = useState([]);
+    const [popularTopics, setPopularTopics] = useState([]);
+
     const [selectedTopic, setSelectedTopic] = useState(null);
 
     // Determine if already logged in
@@ -113,12 +117,23 @@ function Pogchat() {
             PogApi.getTopics(null, category)
                 .then((data) => {
                     let topics = data.data;
-                    console.log(topics);
                     setCategoryTopics(topics);
                 })
         }
         fetchData()
     }, [userInfo, streamInfo])
+
+    // Populate initial popular topics
+    useEffect(() => {
+        async function fetchData() {
+            PogApi.getPopularTopics()
+                .then((data) => {
+                    let topics = data.data;
+                    setPopularTopics(topics);
+                })
+        }
+        fetchData()
+    }, [userInfo])
 
     let downloadTopics = useCallback(() => {
         async function fetchData(streamOnly) {
@@ -143,9 +158,21 @@ function Pogchat() {
             }
 
         }
+        async function fetchPopularData() {
+            PogApi.getPopularTopics()
+                .then((data) => {
+                    let topics = data.data;
+                    setPopularTopics(topics);
+                })
+        }
+        fetchPopularData()
         fetchData(true)
         fetchData(false)
     }, [userInfo, streamInfo])
+
+    let logout = useCallback(() => {
+        chrome.storage.sync.clear(() => {setUserInfo(null)})
+    }, [])
 
     let onLoginClicked = () => {
         let uuid = uuidv4();
@@ -198,18 +225,37 @@ function Pogchat() {
                     </div>
                 }
                 {streamInfo &&
+                    <div>
+                        <div className="Pogchat-TopicLink-Header">
+                            Recent topics in <span className="Pogchat-Category">{streamInfo.category}</span>
+                        </div>
+                        { categoryTopics.length === 0 &&
+                            <div className="Pogchat-Empty-Topic">
+                                <img style={{height: '64px'}} src="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png" alt="Jackie chan what: no topics created yet"/>
+                                <p>No topics created :( add one below!</p>
+                            </div>
+                        }
+                        <div className="Pogchat-TopicLink-Container">
+                            {categoryTopics && categoryTopics.map((item) => {
+                                return (<TopicLink topic={item} onTopicClicked={onTopicClicked}/>)
+                            })}
+                        </div>
+                    </div>
+                }
+                {streamInfo &&
                 <div>
                     <div className="Pogchat-TopicLink-Header">
-                        Recent topics in <span className="Pogchat-Category">{streamInfo.category}</span>
+                        Popular Topics on Twitch
                     </div>
-                    { categoryTopics.length === 0 &&
-                        <div className="Pogchat-Empty-Topic">
-                            <img style={{height: '64px'}} src="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png" alt="Jackie chan what: no topics created yet"/>
-                            <p>No topics created :( add one below!</p>
-                        </div>
+                    {popularTopics.length === 0 &&
+                    <div className="Pogchat-Empty-Topic">
+                        {/* TODO: ADD CORRECT PICTURE HERE! */}
+                        <img style={{height: '64px'}} src="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png" alt="Jackie chan what: no topics created yet"/>
+                        <p>No topics created :( add one below!</p>
+                    </div>
                     }
                     <div className="Pogchat-TopicLink-Container">
-                        {categoryTopics && categoryTopics.map((item) => {
+                        {popularTopics && popularTopics.map((item) => {
                             return (<TopicLink topic={item} onTopicClicked={onTopicClicked}/>)
                         })}
                     </div>
@@ -222,7 +268,7 @@ function Pogchat() {
                     <button style={{padding: 16, marginRight: '8px'}} className={BUTTON_CLASSES} >
                         Share PogChat!
                     </button>
-                    <button style={{padding: 16}} className={BUTTON_CLASSES} >
+                    <button style={{padding: 16}} className={BUTTON_CLASSES} onClick={() => setCurrentState('settings')} >
                         Settings
                     </button>
                 </div>
@@ -238,6 +284,9 @@ function Pogchat() {
             }
             {userInfo && currentState === 'viewing-topic' && selectedTopic &&
                 <PogTopic topic={selectedTopic} onClose={onTopicClosed}/>
+            }
+            {userInfo && currentState === 'settings' &&
+                <SettingsPanel closeCallback={() => setCurrentState(null)} userInfo={userInfo} logoutCallback={logout}/>
             }
 
         </div>

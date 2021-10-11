@@ -19,7 +19,7 @@ data class User(
     @get: NotBlank
     val lastKnownDisplayName: String = "",
 
-    val chatColor: String = ""
+    var chatColor: String = ""
 
 ) {
     override fun equals(other: Any?): Boolean {

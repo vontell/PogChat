@@ -26,6 +26,8 @@ data class Topic(
 
     val description: String? = null,
 
+    var viewCount: Int = 0,
+
     @Temporal(TemporalType.TIMESTAMP)
     val created_at: Date = Date(),
 
