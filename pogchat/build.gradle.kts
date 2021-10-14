@@ -46,3 +46,8 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+task<Exec>("buildDocker") {
+	setWorkingDir(".")
+	commandLine("docker build --build-arg JAR_FILE=build/libs/\\*.jar -t vontech/pogchat .".split(" "))
+}
