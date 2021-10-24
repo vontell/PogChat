@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
+// https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#packaging-executable.jars
+
 plugins {
 	id("org.springframework.boot") version "2.4.10"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -8,11 +10,16 @@ plugins {
 	kotlin("plugin.spring") version "1.4.32"
 	kotlin("plugin.jpa") version "1.4.32"
 	kotlin("kapt") version "1.4.32"
+
 }
 
 group = "org.vontech"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.3-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+springBoot {
+	mainClass.set("org.vontech.pogchat.PogchatApplicationKt")
+}
 
 repositories {
 	mavenCentral()
@@ -34,6 +41,7 @@ dependencies {
 	kapt("org.hibernate:hibernate-jpamodelgen:5.4.30.Final")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	compileOnly("org.springframework.boot:spring-boot-starter-tomcat")
 }
 
 tasks.withType<KotlinCompile> {
@@ -45,9 +53,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-task<Exec>("buildDocker") {
-	setWorkingDir(".")
-	commandLine("docker build --build-arg JAR_FILE=build/libs/\\*.jar -t vontech/pogchat .".split(" "))
 }
