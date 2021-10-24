@@ -1,6 +1,8 @@
 /*global chrome*/
 const axios = require('axios').default;
 
+const URL = "http://localhost:8080";
+
 async function getHeaders() {
     return new Promise(resolve => {
         chrome.storage.sync.get("info", (data) => {
