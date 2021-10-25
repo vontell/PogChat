@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.vontech.pogchat.UserContext
+import org.vontech.pogchat.messages.MessageRepository
 import kotlin.reflect.jvm.javaGetter
 
 @Controller
@@ -14,6 +15,9 @@ class TopicController {
 
     @Autowired
     private val topicRepository: TopicRepository? = null
+
+    @Autowired
+    private val messageRepository: MessageRepository? = null
 
     @Autowired
     private val userContext: UserContext? = null
@@ -60,6 +64,19 @@ class TopicController {
     @ResponseBody
     fun getPopularTopics(): Iterable<Topic?> {
         return topicRepository!!.findTop10ByOrderByViewCountDesc()
+    }
+
+    /**
+     * Obtains all topics that the authenticated user has either
+     * posted or posted a message in
+     */
+    @GetMapping("/participant")
+    @ResponseBody
+    fun getTopicsUserParticipating(): Iterable<Topic?> {
+        val user = userContext!!.getUser()
+        val myCreatedTopics = topicRepository!!.findByUserOrderByCreatedAtDesc(user)
+        val myMessagedTopics = messageRepository!!.findTopicsOfMessagesFromUser(user).sortedBy { it!!.createdAt }.reversed()
+        return myMessagedTopics.union(myCreatedTopics)
     }
 
 }

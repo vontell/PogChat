@@ -25,5 +25,5 @@ data class Message(
     val content: String = "",
 
     @Temporal(TemporalType.TIMESTAMP)
-    val created_at: Date = Date()
+    val createdAt: Date = Date()
 )

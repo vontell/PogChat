@@ -29,7 +29,7 @@ data class Topic(
     var viewCount: Int = 0,
 
     @Temporal(TemporalType.TIMESTAMP)
-    val created_at: Date = Date(),
+    val createdAt: Date = Date(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -77,7 +77,7 @@ data class Topic(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as User
+        other as Topic
 
         return id == other.id
     }

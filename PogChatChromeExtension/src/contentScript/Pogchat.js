@@ -1,12 +1,16 @@
 /*global chrome*/
 import React, {useState, useEffect, useCallback} from 'react';
 import PogTopicCreation from './PogTopicCreation';
+import TopicList from "./PogTopicList";
 import TopicLink from "./TopicLink";
 import '../App.css';
 import {getStreamInfo} from "./utils";
 import PogApi from "./api";
 import PogTopic from "./PogTopic";
 import SettingsPanel from "./SettingsPanel";
+
+import logo from '../logo.png';
+import PogTopicList from "./PogTopicList";
 
 const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
 
@@ -28,6 +32,7 @@ function Pogchat() {
     const [streamTopics, setStreamTopics] = useState([]);
     const [categoryTopics, setCategoryTopics] = useState([]);
     const [popularTopics, setPopularTopics] = useState([]);
+    const [participatingTopics, setParticipatingTopics] = useState([]);
 
     const [selectedTopic, setSelectedTopic] = useState(null);
 
@@ -135,6 +140,18 @@ function Pogchat() {
         fetchData()
     }, [userInfo])
 
+    // Populate initial participating messages
+    useEffect(() => {
+        async function fetchData() {
+            PogApi.getParticipatingTopics()
+                .then((data) => {
+                    let topics = data.data;
+                    setParticipatingTopics(topics);
+                })
+        }
+        fetchData()
+    }, [userInfo])
+
     let downloadTopics = useCallback(() => {
         async function fetchData(streamOnly) {
             if (!userInfo || ! streamInfo) {
@@ -165,6 +182,14 @@ function Pogchat() {
                     setPopularTopics(topics);
                 })
         }
+        async function fetchParticipatingData() {
+            PogApi.getPopularTopics()
+                .then((data) => {
+                    let topics = data.data;
+                    setParticipatingTopics(topics);
+                })
+        }
+        fetchParticipatingData()
         fetchPopularData()
         fetchData(true)
         fetchData(false)
@@ -195,7 +220,7 @@ function Pogchat() {
     console.log(currentState)
 
     return (
-        <div style={{padding: 16, height: '100%'}}>
+        <div style={{padding: 16, height: '100%'}} className="hide-scrollbar">
             {!userInfo &&
                 <button style={{padding: 16}} className={BUTTON_CLASSES} onClick={onLoginClicked} >
                     Login with Twitch
@@ -207,59 +232,48 @@ function Pogchat() {
                     Welcome to Pogchat, {userInfo.user.lastKnownDisplayName}!
                 </div><br />
                 {streamInfo &&
-                    <div>
-                        <div className="Pogchat-TopicLink-Header">
-                            Recent topics in <span className="Pogchat-StreamName">{streamInfo.streamName}</span>
-                        </div>
-                        {streamTopics.length === 0 &&
-                            <div className="Pogchat-Empty-Topic">
-                                <img style={{height: '64px'}} src="https://www.streamscheme.com/wp-content/uploads/2020/04/resident-sleeper.png" alt="Resident sleeper: no topics created yet"/>
-                                <p>No topics created :( add one below!</p>
-                            </div>
-                        }
-                        <div className="Pogchat-TopicLink-Container">
-                            {streamTopics && streamTopics.map((item) => {
-                                return (<TopicLink topic={item} onTopicClicked={onTopicClicked}/>)
-                            })}
-                        </div>
-                    </div>
+                    <TopicList
+                        topicList={streamTopics}
+                        title={(<div>Recent topics in <span className="Pogchat-StreamName">{streamInfo.streamName}</span></div>)}
+                        emptyImage="https://www.streamscheme.com/wp-content/uploads/2020/04/resident-sleeper.png"
+                        emptyAlt="Resident sleeper: no topics created yet"
+                        emptyText="No topics created :( add one below!"
+                        onTopicClicked={onTopicClicked}
+                        colorVariant="PURPLE"
+                    />
                 }
                 {streamInfo &&
-                    <div>
-                        <div className="Pogchat-TopicLink-Header">
-                            Recent topics in <span className="Pogchat-Category">{streamInfo.category}</span>
-                        </div>
-                        { categoryTopics.length === 0 &&
-                            <div className="Pogchat-Empty-Topic">
-                                <img style={{height: '64px'}} src="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png" alt="Jackie chan what: no topics created yet"/>
-                                <p>No topics created :( add one below!</p>
-                            </div>
-                        }
-                        <div className="Pogchat-TopicLink-Container">
-                            {categoryTopics && categoryTopics.map((item) => {
-                                return (<TopicLink topic={item} onTopicClicked={onTopicClicked}/>)
-                            })}
-                        </div>
-                    </div>
+                    <TopicList
+                        topicList={categoryTopics}
+                        title={(<div>Recent topics in <span className="Pogchat-Category">{streamInfo.category}</span></div>)}
+                        emptyImage="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png"
+                        emptyAlt="Jackie chan what: no topics created yet"
+                        emptyText="No topics created :( add one below!"
+                        onTopicClicked={onTopicClicked}
+                        colorVariant="GREEN"
+                    />
                 }
                 {streamInfo &&
-                <div>
-                    <div className="Pogchat-TopicLink-Header">
-                        Popular Topics on Twitch
-                    </div>
-                    {popularTopics.length === 0 &&
-                    <div className="Pogchat-Empty-Topic">
-                        {/* TODO: ADD CORRECT PICTURE HERE! */}
-                        <img style={{height: '64px'}} src="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png" alt="Jackie chan what: no topics created yet"/>
-                        <p>No topics created :( add one below!</p>
-                    </div>
-                    }
-                    <div className="Pogchat-TopicLink-Container">
-                        {popularTopics && popularTopics.map((item) => {
-                            return (<TopicLink topic={item} onTopicClicked={onTopicClicked}/>)
-                        })}
-                    </div>
-                </div>
+                    <TopicList
+                        topicList={categoryTopics}
+                        title="Popular Topics on Twitch"
+                        emptyImage="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png"
+                        emptyAlt="Jackie chan what: no topics created yet"
+                        emptyText="No topics created :( add one below!"
+                        onTopicClicked={onTopicClicked}
+                        colorVariant="BLUE"
+                    />
+                }
+                {streamInfo &&
+                    <TopicList
+                        topicList={participatingTopics}
+                        title="Topics You're Participating In"
+                        emptyImage={logo}
+                        emptyAlt="The PogChat logo"
+                        emptyText="You have no topics or messages! Post a message."
+                        onTopicClicked={onTopicClicked}
+                        colorVariant="RED"
+                    />
                 }
                 <button style={{padding: 16}} className={BUTTON_CLASSES} onClick={() => setCurrentState('create-topic')} >
                     Create Topic

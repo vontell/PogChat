@@ -76,7 +76,6 @@
 
 .Pogchat-TopicLink {
   width: 184px;
-  background-color: #9147ff;
   color: white;
   border-radius: 0.4rem;
   padding: 8px;
@@ -84,10 +83,6 @@
   display: inline-flex;
   margin-right: 8px;
   cursor: pointer;
-}
-
-.Pogchat-TopicLink:hover {
-  background-color: #772ce8;
 }
 
 .Pogchat-TopicLink-Title {
@@ -137,6 +132,17 @@
   right: 12px;
   display: inline-flex;
   position: absolute;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 @keyframes App-logo-spin {

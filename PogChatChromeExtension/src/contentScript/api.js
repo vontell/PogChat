@@ -24,7 +24,7 @@ const PogApi = {
             params['stream'] = stream;
         }
         return axios.get(
-            "http://localhost:8080/topics",
+            `${URL}/topics`,
             {
                 headers: headers,
                 params
@@ -35,7 +35,17 @@ const PogApi = {
     async getPopularTopics() {
         let headers = await getHeaders();
         return axios.get(
-            "http://localhost:8080/topics/popular",
+            `${URL}/topics/popular`,
+            {
+                headers: headers
+            }
+        )
+    },
+
+    async getParticipatingTopics() {
+        let headers = await getHeaders();
+        return axios.get(
+            `${URL}/topics/participant`,
             {
                 headers: headers
             }
@@ -45,7 +55,7 @@ const PogApi = {
     async viewTopic(topic_id) {
         let headers = await getHeaders();
         return axios.post(
-            "http://localhost:8080/topics/view",
+            `${URL}/topics/view`,
             {
                 topic_id
             },
@@ -56,7 +66,7 @@ const PogApi = {
     async createTopic(title, description, category, stream) {
         let headers = await getHeaders();
         return axios.post(
-            "http://localhost:8080/topics",
+            `${URL}/topics`,
             {
                 "title": title,
                 "category": category,
@@ -70,7 +80,7 @@ const PogApi = {
     async createMessage(topic_id, message) {
         let headers = await getHeaders();
         return axios.post(
-            "http://localhost:8080/messages",
+            `${URL}/messages`,
             {
                 topic_id, message
             },
@@ -81,7 +91,7 @@ const PogApi = {
     async getMessages(topic_id) {
         let headers = await getHeaders();
         return axios.get(
-            "http://localhost:8080/messages",
+            `${URL}/messages`,
             {
                 headers: headers,
                 params: { topic_id }
@@ -92,7 +102,7 @@ const PogApi = {
     async updateUserColor(color) {
         let headers = await getHeaders();
         return axios.post(
-            "http://localhost:8080/users/color",
+            `${URL}/users/color`,
             {
                 color
             },

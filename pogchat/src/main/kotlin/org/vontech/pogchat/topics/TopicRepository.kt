@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
+import org.vontech.pogchat.users.User
 
 interface TopicRepository : CrudRepository<Topic?, Long?>, JpaSpecificationExecutor<Topic> {
 
@@ -16,5 +17,7 @@ interface TopicRepository : CrudRepository<Topic?, Long?>, JpaSpecificationExecu
     fun findTop10ByOrderByViewCountDesc(): Iterable<Topic?>
 
     fun findAll(spec: Specification<Topic>): Iterable<Topic?>
+
+    fun findByUserOrderByCreatedAtDesc(user: User): Iterable<Topic?>
 
 }

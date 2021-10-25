@@ -41,6 +41,8 @@ function SettingsPanel({userInfo, closeCallback, logoutCallback}) {
             <button style={{padding: 16, marginTop: 16}} className={BUTTON_CLASSES} onClick={logoutCallback} >
                 Log Out
             </button>
+            <br />
+            <a href="https://nyk5y8vq03a.typeform.com/to/EduPcPhC" style={{color: 'plum', fontSize: 12}} target="_blank">Feedback Form</a>
 
 
         </div>
