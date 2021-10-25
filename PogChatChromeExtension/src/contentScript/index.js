@@ -7,7 +7,7 @@ import React from "react";
 import Pogchat from "./Pogchat";
 
 const CHAT_CONTAINER_SEL = "section[data-test-selector='chat-room-component-layout']";
-const CHAT_HEADER_SEL = "h5[data-test-selector='chat-room-header-label']";
+const CHAT_HEADER_SEL = "h4[data-test-selector='chat-room-header-label']";
 const BUTTON_CLASSES = "ScCoreButton-sc-1qn4ixc-0 ScCoreButtonPrimary-sc-1qn4ixc-1 jGqsfG ksFrFH";
 
 waitToAttachPogchat();
@@ -33,6 +33,7 @@ export function attachButtonSwitchers() {
 
   // Create the container for the pogchat, but hide it
   const pogChatContainer = document.createElement("div")
+  pogChatContainer.id = 'pogchat-container';
   chatContainer.parentNode.appendChild(pogChatContainer);
   const originalPogChatDisplay = pogChatContainer.style.display;
   pogChatContainer.style.setProperty('display', 'none', 'important');

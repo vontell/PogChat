@@ -8,6 +8,7 @@ import {getStreamInfo} from "./utils";
 import PogApi from "./api";
 import PogTopic from "./PogTopic";
 import SettingsPanel from "./SettingsPanel";
+import { typeAndSwitchToChat } from "./utils"
 
 import logo from '../logo.png';
 import PogTopicList from "./PogTopicList";
@@ -279,7 +280,7 @@ function Pogchat() {
                     Create Topic
                 </button>
                 <div className="Pogchat-Bottom-Buttons">
-                    <button style={{padding: 16, marginRight: '8px'}} className={BUTTON_CLASSES} >
+                    <button style={{padding: 16, marginRight: '8px'}} className={BUTTON_CLASSES} onClick={() => typeAndSwitchToChat("Chat about meta, teams, and more right in Twitch chat using PogChat. Download at pogchat.gg")}>
                         Share PogChat!
                     </button>
                     <button style={{padding: 16}} className={BUTTON_CLASSES} onClick={() => setCurrentState('settings')} >
