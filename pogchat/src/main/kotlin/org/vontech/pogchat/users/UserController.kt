@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.vontech.pogchat.UserContext
+import org.vontech.pogchat.audit.AuditLogger
+import org.vontech.pogchat.audit.AuditOperation
 
 @Controller
 @RequestMapping(path = ["/users"])
@@ -15,6 +17,9 @@ class UserController {
     @Autowired
     private val userContext: UserContext? = null
 
+    @Autowired
+    private val auditLogger: AuditLogger? = null
+
     @PostMapping("/color")
     @ResponseBody
     fun changeColor(
@@ -24,6 +29,7 @@ class UserController {
         val user = userContext!!.getUser()
         user.chatColor = colorRequest.color
         userRepository!!.save(user)
+        auditLogger!!.log(AuditOperation.USER_CHANGE_COLOR, user=user)
     }
 
 }

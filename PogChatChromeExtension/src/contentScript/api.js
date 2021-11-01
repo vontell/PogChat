@@ -1,7 +1,7 @@
 /*global chrome*/
 const axios = require('axios').default;
 
-const URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080";
 
 async function getHeaders() {
     return new Promise(resolve => {
@@ -11,7 +11,6 @@ async function getHeaders() {
             })
         });
     })
-
 }
 
 
@@ -24,7 +23,7 @@ const PogApi = {
             params['stream'] = stream;
         }
         return axios.get(
-            `${URL}/topics`,
+            `${BASE_URL}/topics`,
             {
                 headers: headers,
                 params
@@ -35,7 +34,7 @@ const PogApi = {
     async getPopularTopics() {
         let headers = await getHeaders();
         return axios.get(
-            `${URL}/topics/popular`,
+            `${BASE_URL}/topics/popular`,
             {
                 headers: headers
             }
@@ -45,7 +44,25 @@ const PogApi = {
     async getParticipatingTopics() {
         let headers = await getHeaders();
         return axios.get(
-            `${URL}/topics/participant`,
+            `${BASE_URL}/topics/participant`,
+            {
+                headers: headers
+            }
+        )
+    },
+
+    async getStartingTopics(stream, category) {
+        let headers = await getHeaders();
+        let url = new URL(`${BASE_URL}/topics/startup`);
+        let params = url.searchParams;
+        if (stream) {
+            params.append("stream", stream);
+        }
+        if (category) {
+            params.append("category", category);
+        }
+
+        return axios.get(url.toString(),
             {
                 headers: headers
             }
@@ -55,7 +72,7 @@ const PogApi = {
     async viewTopic(topic_id) {
         let headers = await getHeaders();
         return axios.post(
-            `${URL}/topics/view`,
+            `${BASE_URL}/topics/view`,
             {
                 topic_id
             },
@@ -66,7 +83,7 @@ const PogApi = {
     async createTopic(title, description, category, stream) {
         let headers = await getHeaders();
         return axios.post(
-            `${URL}/topics`,
+            `${BASE_URL}/topics`,
             {
                 "title": title,
                 "category": category,
@@ -79,8 +96,9 @@ const PogApi = {
 
     async createMessage(topic_id, message) {
         let headers = await getHeaders();
+        message = message.trim()
         return axios.post(
-            `${URL}/messages`,
+            `${BASE_URL}/messages`,
             {
                 topic_id, message
             },
@@ -91,7 +109,7 @@ const PogApi = {
     async getMessages(topic_id) {
         let headers = await getHeaders();
         return axios.get(
-            `${URL}/messages`,
+            `${BASE_URL}/messages`,
             {
                 headers: headers,
                 params: { topic_id }
@@ -102,7 +120,7 @@ const PogApi = {
     async updateUserColor(color) {
         let headers = await getHeaders();
         return axios.post(
-            `${URL}/users/color`,
+            `${BASE_URL}/users/color`,
             {
                 color
             },

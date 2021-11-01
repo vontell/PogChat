@@ -49,20 +49,15 @@ export async function getStreamInfo() {
 
 export function typeAndSwitchToChat(text) {
     let chatInput = document.body.querySelector("textarea[data-test-selector='chat-input']");
-    console.log(chatInput)
-    console.log(chatInput.value)
     chatInput.value = text;
-    console.log(chatInput.value)
     let evt = document.createEvent("Events");
     evt.initEvent("change", true, true);
     chatInput.dispatchEvent(evt);
 
     // Now hide pogchat and show regular chat
     let pogChat = document.body.querySelector("#pogchat-container")
-    console.log(pogChat)
     let twitchChat = document.body.querySelector("section[data-test-selector='chat-room-component-layout']")
     twitchChat.style.display = pogChat.style.display;
     pogChat.style.setProperty('display', 'none', 'important');
-
 }
 

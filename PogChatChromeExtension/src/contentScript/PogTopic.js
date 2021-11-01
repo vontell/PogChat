@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import '../App.css';
-import {getStreamInfo, useInterval} from "./utils";
+import {getStreamInfo, typeAndSwitchToChat, useInterval} from "./utils";
 import PogApi from "./api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -17,6 +17,8 @@ function PogTopic({topic, onClose}) {
 
     const [message, setMessage] = useState(null);
     const [messages, setMessages] = useState([])
+    const [inputHovered, setInputHovered] = useState(false);
+    const [inputFocused, setInputFocused] = useState(false);
 
     let createMessage = useCallback(() => {
         PogApi.createMessage(topic.id, message)
@@ -50,16 +52,22 @@ function PogTopic({topic, onClose}) {
             })
     }, CHAT_REFRESH_RATE)
 
+    let inputIsActive = inputFocused || inputHovered;
 
     return (
-        <div>
+        <div style={{height: '100%'}}>
 
             <div className="Pogchat-Header">
                 <FontAwesomeIcon className="Pogchat-BackButton" onClick={() => onClose()} icon="arrow-left" /> {topic.title}
             </div>
 
-            <div style={{marginBottom: 8}}>
-                <span className="Pogchat-StreamName">{topic.stream}</span> - <span className="Pogchat-Category">{topic.category}</span>
+            <div>
+                <span className="Pogchat-StreamName">{topic.stream}</span> - <span className="Pogchat-Category">{topic.category}</span>  ({topic.viewCount} views)
+            </div>
+
+            <div>
+                <p style={{fontStyle: 'italic', marginBottom: 16, cursor: 'pointer'}}
+                   onClick={() => typeAndSwitchToChat(`Hey, I'm chatting about "${topic.title}" in PogChat, check it out at pogchat.gg (chat about strats, metas, teams, and more right in Twitch chat)`)}>Share this topic in Twitch Chat</p>
             </div>
 
             <div className="Pogchat-Message-Container">
@@ -68,26 +76,38 @@ function PogTopic({topic, onClose}) {
                 })}
             </div>
 
-            <div className="Pogchat-Chat-Input">
-                <textarea data-a-target="chat-input" data-test-selector="chat-input" aria-label="Send a message"
-                          className="ScInputBase-sc-1wz0osy-0 ScTextArea-sc-1ywwys8-0 kYJGMC InjectLayout-sc-588ddc-0 iZLAMf tw-textarea tw-textarea--no-resize"
+            <div onFocus={() => setInputFocused(true)}
+                 onBlur={() => setInputFocused(false)}
+                 onMouseEnter={() => setInputHovered(true)}
+                 onMouseLeave={() => setInputHovered(true)}
+                 style={{
+                     display: 'inline',
+                     backgroundColor: '#dbdbdb',
+                     border: inputIsActive ? '2px solid #afafaf' : '2px solid #dbdbdb',
+                     borderRadius: 6,
+                     transition: 'border 0.2 ease-in',
+                 }}
+            >
+                <textarea aria-label="Send a message"
                           autoComplete="pog-chat" maxLength="500" placeholder="Send a message" rows="1"
                           style={{
-                              paddingRight: '6.5rem',
-                              paddingLeft: '3.8rem',
-                              width: 'calc(100% - 100px)',
-                              display: 'inline'
+                              color: 'black',
+                              border: 'none',
+                              overflow: 'auto',
+                              outline: 'none',
+                              resize: 'none',
+                              backgroundColor: 'transparent',
+                              padding: 4
                           }}
                           value={message}
                           onChange={(ev) => {
                               setMessage(ev.target.value)
                           }}
                 />
-                <button style={{padding: 16, float: 'right', marginRight: '16px'}} className={BUTTON_CLASSES} onClick={createMessage} >
-                    Send
-                </button>
             </div>
-
+            <button style={{padding: 16, float: 'right', marginRight: '16px'}} className={BUTTON_CLASSES} onClick={createMessage} >
+                Send
+            </button>
 
         </div>
     )

@@ -108,22 +108,19 @@
   float: right;
 }
 
-.Pogchat-Chat-Input {
-  position: absolute;
-  bottom: 16px;
-}
-
 .Pogchat-Message-Container {
-  height: 350px;
+  height: calc(100% - 200px);
   overflow-y: scroll;
+  margin-bottom: 16px;
 }
 
 .Pogchat-Message {
   margin-bottom: 8px;
+  word-break: break-word;
 }
 
 .Pogchat-Empty-Topic {
-  margin: 12px;
+  margin-top: 12px;
   text-align: center;
 }
 

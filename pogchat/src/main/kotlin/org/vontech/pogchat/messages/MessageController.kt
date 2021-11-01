@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.vontech.pogchat.UserContext
+import org.vontech.pogchat.audit.AuditLogger
+import org.vontech.pogchat.audit.AuditOperation
 import org.vontech.pogchat.topics.TopicRepository
 
 @Controller
@@ -19,6 +21,9 @@ class MessageController {
     @Autowired
     private val userContext: UserContext? = null
 
+    @Autowired
+    private val auditLogger: AuditLogger? = null
+
     @PostMapping
     @ResponseBody
     fun addNewMessage(
@@ -28,6 +33,7 @@ class MessageController {
         val topic = topicRepository!!.findById(messageRequest.topic_id)
         val messageObj = Message(user=user, topic=topic.get(), content=messageRequest.message)
         messageRepository!!.save(messageObj)
+        auditLogger!!.log(AuditOperation.MESSAGE_CREATE, user=user)
         return messageObj
     }
 

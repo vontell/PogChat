@@ -94,106 +94,31 @@ function Pogchat() {
         pollLogin(waitUUID)
     }, [waitUUID])
 
-    // Populate initial topic information for STREAM
-    useEffect(() => {
-        async function fetchData() {
+    let downloadTopics = useCallback(() => {
+        async function fetchData(streamOnly) {
             if (!userInfo || ! streamInfo) {
                 return;
             }
             console.log("GETTING TOPICS")
             const {streamId, category} = streamInfo;
             console.log(`CONTEXT: ${streamId} - ${category}`)
-            PogApi.getTopics(streamId, category)
+            PogApi.getStartingTopics(streamId, category)
                 .then((data) => {
                     let topics = data.data;
+                    console.log("STARTUP TOPICS")
                     console.log(topics);
-                    setStreamTopics(topics);
+                    setStreamTopics(topics.streamTopics);
+                    setParticipatingTopics(topics.participantTopics)
+                    setCategoryTopics(topics.categoryTopics)
+                    setPopularTopics(topics.popularTopics)
                 })
         }
         fetchData()
     }, [userInfo, streamInfo])
 
-    // Populate initial topic information for GAME
+    // Fetch startup topics
     useEffect(() => {
-        async function fetchData() {
-            if (!userInfo || ! streamInfo) {
-                return;
-            }
-            const {streamId, category} = streamInfo;
-            PogApi.getTopics(null, category)
-                .then((data) => {
-                    let topics = data.data;
-                    setCategoryTopics(topics);
-                })
-        }
-        fetchData()
-    }, [userInfo, streamInfo])
-
-    // Populate initial popular topics
-    useEffect(() => {
-        async function fetchData() {
-            PogApi.getPopularTopics()
-                .then((data) => {
-                    let topics = data.data;
-                    setPopularTopics(topics);
-                })
-        }
-        fetchData()
-    }, [userInfo])
-
-    // Populate initial participating messages
-    useEffect(() => {
-        async function fetchData() {
-            PogApi.getParticipatingTopics()
-                .then((data) => {
-                    let topics = data.data;
-                    setParticipatingTopics(topics);
-                })
-        }
-        fetchData()
-    }, [userInfo])
-
-    let downloadTopics = useCallback(() => {
-        async function fetchData(streamOnly) {
-            if (!userInfo || ! streamInfo) {
-                return;
-            }
-            const {streamId, category} = streamInfo;
-            if (streamOnly) {
-                PogApi.getTopics(streamId, category)
-                    .then((data) => {
-                        let topics = data.data;
-                        console.log(topics);
-                        setStreamTopics(topics);
-                    })
-            } else {
-                PogApi.getTopics(null, category)
-                    .then((data) => {
-                        let topics = data.data;
-                        console.log(topics);
-                        setCategoryTopics(topics);
-                    })
-            }
-
-        }
-        async function fetchPopularData() {
-            PogApi.getPopularTopics()
-                .then((data) => {
-                    let topics = data.data;
-                    setPopularTopics(topics);
-                })
-        }
-        async function fetchParticipatingData() {
-            PogApi.getPopularTopics()
-                .then((data) => {
-                    let topics = data.data;
-                    setParticipatingTopics(topics);
-                })
-        }
-        fetchParticipatingData()
-        fetchPopularData()
-        fetchData(true)
-        fetchData(false)
+        downloadTopics()
     }, [userInfo, streamInfo])
 
     let logout = useCallback(() => {
@@ -256,7 +181,7 @@ function Pogchat() {
                 }
                 {streamInfo &&
                     <TopicList
-                        topicList={categoryTopics}
+                        topicList={popularTopics}
                         title="Popular Topics on Twitch"
                         emptyImage="https://www.pngkey.com/png/full/66-661421_jackie-chan-wtf-meme-jackie-chan.png"
                         emptyAlt="Jackie chan what: no topics created yet"

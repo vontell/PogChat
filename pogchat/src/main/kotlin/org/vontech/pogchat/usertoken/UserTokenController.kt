@@ -5,6 +5,8 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.vontech.pogchat.TwitchApi
+import org.vontech.pogchat.audit.AuditLogger
+import org.vontech.pogchat.audit.AuditOperation
 import org.vontech.pogchat.config.JwtTokenUtil
 import org.vontech.pogchat.config.JwtUserDetailsService
 import org.vontech.pogchat.users.User
@@ -36,6 +38,9 @@ class UserTokenController {
 
     @Autowired
     private val userDetailsService: JwtUserDetailsService? = null
+
+    @Autowired
+    private val auditLogger: AuditLogger? = null
 
     @GetMapping
     fun receiveTwitchToken(
@@ -71,6 +76,7 @@ class UserTokenController {
         )
         userTokenRepository?.save(newToken) ?: throw Exception("Unable to save access token")
 
+        auditLogger!!.log(AuditOperation.USER_LOGIN, user=user)
         return "auth_success.html"
     }
 
