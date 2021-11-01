@@ -109,9 +109,8 @@
 }
 
 .Pogchat-Message-Container {
-  height: calc(100% - 200px);
+  height: 100%;
   overflow-y: scroll;
-  margin-bottom: 16px;
 }
 
 .Pogchat-Message {
@@ -129,6 +128,23 @@
   right: 12px;
   display: inline-flex;
   position: absolute;
+}
+
+.Pogchat-Input-Container {
+  display: flex;
+  height: 54px;
+}
+
+.Pogchat-Input-TextArea-Container {
+  display: inline;
+  background-color: #dbdbdb;
+  border-radius: 6px;
+  transition: border 0.2s ease-in;
+  flex-grow: 1;
+}
+
+.Pogchat-Button-Container {
+  margin-left: 8px;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

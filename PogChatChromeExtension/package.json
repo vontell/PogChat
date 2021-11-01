@@ -13,6 +13,7 @@
     "react-browser-extension-scripts": "4.0.10",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
+    "react-spinners": "^0.11.0",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
