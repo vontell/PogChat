@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -55,6 +56,13 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         return super.authenticationManagerBean()
     }
 
+    @Throws(java.lang.Exception::class)
+    override fun configure(web: WebSecurity) {
+        web
+            .ignoring()
+            .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**")
+    }
+
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         // We don't need CSRF for this example
@@ -62,7 +70,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             // Enable cors
             .cors().configurationSource(corsConfigurationSource()).and()
             // dont authenticate this particular request
-            .authorizeRequests().antMatchers("/auth").permitAll()
+            .authorizeRequests().antMatchers("/auth", "/").permitAll()
             // all other requests need to be authenticated
             .anyRequest().authenticated().and()
             // make sure we use stateless session; session won't be used to store the user state
