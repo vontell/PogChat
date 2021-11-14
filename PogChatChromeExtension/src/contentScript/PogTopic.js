@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import '../App.css';
 import {getStreamInfo, typeAndSwitchToChat, useInterval} from "./utils";
 import PogApi from "./api";
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import PogMessage from "./PogMessage";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 library.add(faArrowLeft);
 
@@ -19,16 +20,20 @@ function PogTopic({topic, onClose}) {
     const [messages, setMessages] = useState([])
     const [inputHovered, setInputHovered] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
+    const [isFreeScrolling, setIsFreeScrolling] = useState(false);
+    const [isLoadingInitially, setIsLoadingInitially] = useState(true);
+
+    const messagesContainer = useRef();
 
     let createMessage = useCallback(() => {
+        let originalMessage = message;
+        setMessage('');
         PogApi.createMessage(topic.id, message)
             .then((resp) => {
-                setMessage(null);
                 setMessages(messages.concat(resp.data));
-
             })
             .catch(() => {
-                setMessage(null)
+                setMessage(originalMessage);
             })
     }, [message])
 
@@ -36,7 +41,12 @@ function PogTopic({topic, onClose}) {
     useEffect(() => {
         PogApi.getMessages(topic.id)
             .then((resp) => {
+                setIsLoadingInitially(false)
                 setMessages(resp.data)
+                if (!isFreeScrolling) {
+                    messagesContainer.current.scrollTop =
+                        messagesContainer.current.scrollHeight - messagesContainer.current.clientHeight;
+                }
             })
     }, [])
 
@@ -49,8 +59,22 @@ function PogTopic({topic, onClose}) {
         PogApi.getMessages(topic.id)
             .then((resp) => {
                 setMessages(resp.data)
+                if (!isFreeScrolling) {
+                    messagesContainer.current.scrollTop =
+                        messagesContainer.current.scrollHeight - messagesContainer.current.clientHeight;
+                }
             })
     }, CHAT_REFRESH_RATE)
+
+    let handleMessagesScroll = useCallback((ev) => {
+        let element = ev.target;
+        // If scrolled to bottom...
+        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+            setIsFreeScrolling(false);
+        } else {
+            setIsFreeScrolling(true);
+        }
+    }, [])
 
     let inputIsActive = inputFocused || inputHovered;
 
@@ -70,8 +94,19 @@ function PogTopic({topic, onClose}) {
                    onClick={() => typeAndSwitchToChat(`Hey, I'm chatting about "${topic.title}" in PogChat, check it out at pogchat.gg (chat about strats, metas, teams, and more right in Twitch chat)`)}>Share this topic in Twitch Chat</p>
             </div>
 
+            {isLoadingInitially &&
+                <div style={{marginTop: 64}}>
+                    <div style={{marginLeft: 100}}>
+                        <PacmanLoader color={'#9147ff'} loading={true} />
+                    </div><br />
+                    <div style={{textAlign: 'center', fontStyle: 'italic', marginTop: 48}}>
+                        Loading messages...
+                    </div>
+                </div>
+            }
+
             <div style={{marginBottom: 16, flexGrow: 1}}>
-                <div className="Pogchat-Message-Container">
+                <div className="Pogchat-Message-Container" ref={messagesContainer} onScroll={handleMessagesScroll}>
                     {messages.map((item) => {
                         return <PogMessage message={item} />
                     })}
@@ -102,6 +137,12 @@ function PogTopic({topic, onClose}) {
                               value={message}
                               onChange={(ev) => {
                                   setMessage(ev.target.value)
+                              }}
+                              onKeyDown={(e) => {
+                                  if (e.code === "Enter") {
+                                      e.preventDefault();
+                                      createMessage();
+                                  }
                               }}
                     />
                 </div>

@@ -6,7 +6,25 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.io.IOException
+
+
+fun getRedirectLink(): String {
+    println("GETTING SPRING PROFILE")
+    return try {
+        println(System.getenv("SPRING_PROFILES_ACTIVE"))
+        if (System.getenv("SPRING_PROFILES_ACTIVE").equals("prod")) {
+            println("RETURNING https://pogchatgg.herokuapp.com/auth")
+            "https://pogchatgg.herokuapp.com/auth"
+        }
+        else
+            "http://localhost:8080/auth"
+    } catch(e: NullPointerException) {
+        "http://localhost:8080/auth"
+    }
+}
 
 class TwitchApi {
 
@@ -18,22 +36,16 @@ class TwitchApi {
         private val twitchResponseJsonAdapter: JsonAdapter<TwitchAccessTokenResponse> = moshi.adapter(TwitchAccessTokenResponse::class.java)
         private val twitchUserResponseJsonAdapter: JsonAdapter<TwitchUserInformationResponse> = moshi.adapter(TwitchUserInformationResponse::class.java)
 
+        private val redirectLink: String = getRedirectLink()
+
         fun postAuthCodeForAccessToken(accessCode: String): TwitchAccessTokenResponse? {
-//            val accessTokenRequest = """
-//            https://id.twitch.tv/oauth2/token
-//            ?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy
-//            &client_secret=ya1cn775vfeclxlk3jfedn4omf44ui
-//            &code=${accessCode}
-//            &grant_type=authorization_code
-//            &redirect_uri=http://localhost:8080/auth
-//        """.replace("\\s".toRegex(), "")
             val accessTokenRequest = "https://id.twitch.tv/oauth2/token"
             val formBody = FormBody.Builder()
                 .add("client_id", "mbiftzplnzsllgon3p5gqkbke8rkyy")
                 .add("client_secret", "ya1cn775vfeclxlk3jfedn4omf44ui")
                 .add("code", accessCode)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", "http://localhost:8080/auth")
+                .add("redirect_uri", redirectLink)
                 .build()
             val client = OkHttpClient()
             val request = Request.Builder()
@@ -41,7 +53,7 @@ class TwitchApi {
                 .post(formBody)
                 .build()
             client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                if (!response.isSuccessful) throw IOException("Unexpected response: $response")
                 return twitchResponseJsonAdapter.fromJson(response.body!!.source())
             }
         }

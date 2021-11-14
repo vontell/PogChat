@@ -109,7 +109,7 @@
 }
 
 .Pogchat-Message-Container {
-  height: 100%;
+  max-height: calc(100vh - 300px);
   overflow-y: scroll;
 }
 

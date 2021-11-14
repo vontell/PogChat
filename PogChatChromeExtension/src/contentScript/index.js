@@ -16,6 +16,7 @@ waitToAttachPogchat();
 export function waitToAttachPogchat() {
 
   let chatContainer = document.body.querySelector(CHAT_CONTAINER_SEL);
+  console.log(chatContainer)
   if (!chatContainer) {
     setTimeout(waitToAttachPogchat, 1000)
   } else {
@@ -29,6 +30,7 @@ export function attachButtonSwitchers() {
   // First, we grab the "STREAM CHAT" header
   let chatHeader = document.body.querySelector(CHAT_HEADER_SEL)
   let chatContainer = document.body.querySelector(CHAT_CONTAINER_SEL)
+  console.log(chatHeader)
   const originalChatDisplay = chatContainer.style.display
 
   // Create the container for the pogchat, but hide it

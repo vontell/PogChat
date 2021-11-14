@@ -6,6 +6,7 @@ import TopicLink from "./TopicLink";
 import '../App.css';
 import {getStreamInfo} from "./utils";
 import PogApi from "./api";
+import {BASE_URL} from "./api";
 import PogTopic from "./PogTopic";
 import SettingsPanel from "./SettingsPanel";
 import { typeAndSwitchToChat } from "./utils"
@@ -63,7 +64,7 @@ function Pogchat() {
 
         // Poll for finishing
         function pollLogin(uuid) {
-            fetch("http://localhost:8080/auth", {
+            fetch(`${BASE_URL}/auth`, {
                 method: "POST",
                 mode: "cors",
                 headers: {'Content-Type': 'application/json'},
@@ -133,7 +134,7 @@ function Pogchat() {
 
     let onLoginClicked = () => {
         let uuid = uuidv4();
-        const authLink = `https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=http://localhost:8080/auth&response_type=code&scope=user:read:email&state=${uuid}`
+        const authLink = `https://id.twitch.tv/oauth2/authorize\n?client_id=mbiftzplnzsllgon3p5gqkbke8rkyy&redirect_uri=${BASE_URL}/auth&response_type=code&scope=user:read:email&state=${uuid}`
         setWaitUUID(uuid);
         window.open(authLink, '_blank').focus();
     }
