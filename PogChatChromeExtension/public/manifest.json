@@ -1,15 +1,15 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.0.1",
   "short_name": "PogChat",
   "name": "PogChat",
   "description": "Talk strats, builds, esports events, and more in this Twitch chat companion.",
-  "browser_action": {
+  "action": {
     "default_title": "CRE",
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.bundle.js"]
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
@@ -24,5 +24,7 @@
   },
   "options_page": "options.html",
   "permissions": ["storage"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

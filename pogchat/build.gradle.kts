@@ -4,17 +4,16 @@ import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 // https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#packaging-executable.jars
 
 plugins {
-	id("org.springframework.boot") version "2.4.10"
+	id("org.springframework.boot") version "2.6.1"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.4.32"
 	kotlin("plugin.spring") version "1.4.32"
 	kotlin("plugin.jpa") version "1.4.32"
 	kotlin("kapt") version "1.4.32"
-
 }
 
 group = "org.vontech"
-version = "0.0.7-SNAPSHOT"
+version = "0.0.8-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 springBoot {
@@ -38,6 +37,8 @@ dependencies {
 	implementation("com.squareup.moshi:moshi:1.12.0")
 	implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
+	implementation("net.java.dev.jna:jna:5.7.0")
+	implementation("net.java.dev.jna:jna-platform:5.7.0")
 	kapt("org.hibernate:hibernate-jpamodelgen:5.4.30.Final")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
